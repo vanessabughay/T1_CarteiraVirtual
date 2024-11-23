@@ -1,34 +1,49 @@
 package com.example.carteiravirtual
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-
-    private lateinit var conversorApi: ConversorApi
+    private lateinit var dbHelper: DBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        dbHelper = DBHelper(this)
+
+        val tvSaldo: TextView = findViewById(R.id.tvSaldo)
+        val btnDepositar: Button = findViewById(R.id.btnDepositar)
+        val btnListarRecursos: Button = findViewById(R.id.btnListarRecursos)
+        val btnConverter: Button = findViewById(R.id.btnConverter)
+
+        atualizarSaldo(tvSaldo)
+
+        btnDepositar.setOnClickListener {
+            DepositarActivity.start(this)
         }
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://docs.awesomeapi.com.br/api-de-moedas")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        btnListarRecursos.setOnClickListener {
+            ListarRecursosActivity.start(this)
+        }
 
-        conversorApi = retrofit.create(ConversorApi::class.java)
-
+        btnConverter.setOnClickListener {
+            ConverterRecursosActivity.start(this)
+        }
     }
+
+    private fun atualizarSaldo(tvSaldo: TextView) {
+        val saldoReais = dbHelper.buscarSaldo("BRL")
+        tvSaldo.text = "Saldo em R$: %.2f".format(saldoReais)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        atualizarSaldo(findViewById(R.id.tvSaldo))
+    }
+
+
 }
