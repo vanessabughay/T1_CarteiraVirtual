@@ -6,20 +6,17 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Campo de Valor -->
     <EditText
         android:id="@+id/etValor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Digite o valor a depositar"
-        android:inputType="numberDecimal" />
+        android:hint="Valor a ser depositado"
+        android:inputType="numberDecimal"/>
 
-    <!-- Botão de Confirmar -->
     <Button
         android:id="@+id/btnConfirmar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Confirmar Depósito" />
-
+        android:text="Confirmar Depósito"/>
 </LinearLayout>
+

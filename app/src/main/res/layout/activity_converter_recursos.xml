@@ -1,52 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Moeda de Origem -->
     <EditText
         android:id="@+id/etOrigem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Moeda de origem (ex: BRL)"
-        android:inputType="text" />
+        android:hint="Moeda de Origem" />
 
-    <!-- Moeda de Destino -->
     <EditText
         android:id="@+id/etDestino"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Moeda de destino (ex: USD)"
-        android:inputType="text"
-        android:layout_marginTop="8dp" />
+        android:hint="Moeda de Destino" />
 
-    <!-- Valor a Converter -->
     <EditText
         android:id="@+id/etValor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Digite o valor a converter"
-        android:inputType="numberDecimal"
-        android:layout_marginTop="8dp" />
+        android:hint="Valor a ser convertido"
+        android:inputType="numberDecimal" />
 
-    <!-- Botão de Conversão -->
     <Button
         android:id="@+id/btnConverter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Converter" />
 
-    <!-- Resultado da Conversão -->
     <TextView
         android:id="@+id/tvResultado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text=""
-        android:textSize="16sp" />
+        android:text="Resultado"
+        android:textSize="18sp"
+        android:padding="10dp"
+        android:gravity="center" />
 
 </LinearLayout>

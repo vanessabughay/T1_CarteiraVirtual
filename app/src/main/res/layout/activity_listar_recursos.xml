@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lista de Recursos"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp" />
+
     <LinearLayout
+        android:id="@+id/layoutRecursos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- Lista de Recursos -->
-        <TextView
-            android:id="@+id/tvRecursos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nenhum recurso encontrado."
-            android:textSize="16sp" />
-
-    </LinearLayout>
-</ScrollView>
+        android:orientation="vertical" />
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.carteiravirtual
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -8,42 +9,55 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: DBHelper
+    private lateinit var tvSaldo: TextView
+
+    // Definição das constantes para o request code
+    private val REQUEST_CODE_DEPOSITO = 1
+    private val REQUEST_CODE_CONVERSAO = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         dbHelper = DBHelper(this)
+        tvSaldo = findViewById(R.id.tvSaldo)
 
-        val tvSaldo: TextView = findViewById(R.id.tvSaldo)
-        val btnDepositar: Button = findViewById(R.id.btnDepositar)
-        val btnListarRecursos: Button = findViewById(R.id.btnListarRecursos)
-        val btnConverter: Button = findViewById(R.id.btnConverter)
+        // Exibe o saldo atual
+        exibirSaldo()
 
-        atualizarSaldo(tvSaldo)
-
-        btnDepositar.setOnClickListener {
-            DepositarActivity.start(this)
+        // Botão para realizar o depósito
+        findViewById<Button>(R.id.btnDepositar).setOnClickListener {
+            val intent = Intent(this, DepositarActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_DEPOSITO)
         }
 
-        btnListarRecursos.setOnClickListener {
-            ListarRecursosActivity.start(this)
+        // Botão para listar recursos
+        findViewById<Button>(R.id.btnListarRecursos).setOnClickListener {
+            val intent = Intent(this, ListarRecursosActivity::class.java)
+            startActivity(intent)
         }
 
-        btnConverter.setOnClickListener {
-            ConverterRecursosActivity.start(this)
+        // Botão para realizar a conversão
+        findViewById<Button>(R.id.btnConverter).setOnClickListener {
+            val intent = Intent(this, ConverterRecursosActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_CONVERSAO)
         }
     }
 
-    private fun atualizarSaldo(tvSaldo: TextView) {
-        val saldoReais = dbHelper.buscarSaldo("BRL")
-        tvSaldo.text = "Saldo em R$: %.2f".format(saldoReais)
+    private fun exibirSaldo() {
+        val saldo = dbHelper.buscarSaldo("BRL") // "BRL" é o Real
+        tvSaldo.text = "Saldo em R$: %.2f".format(saldo)
     }
 
-    override fun onResume() {
-        super.onResume()
-        atualizarSaldo(findViewById(R.id.tvSaldo))
+    // Captura o resultado da atividade de depósito ou conversão
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK && data != null) {
+            val novoSaldo = data.getDoubleExtra("novoSaldo", 0.0)
+
+            // Atualiza o saldo exibido na MainActivity
+            tvSaldo.text = "Saldo em R$: %.2f".format(novoSaldo)
+        }
     }
-
-
 }

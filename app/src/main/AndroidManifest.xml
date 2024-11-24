@@ -24,6 +24,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Activity para Depositar Recursos -->
+        <activity android:name=".DepositarActivity" />
+
+        <!-- Activity para Listar Recursos -->
+        <activity android:name=".ListarRecursosActivity" />
+
+        <!-- Activity para Converter Recursos -->
+        <activity android:name=".ConverterRecursosActivity" />
     </application>
 
 </manifest>
