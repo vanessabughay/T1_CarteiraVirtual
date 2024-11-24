@@ -13,5 +13,13 @@
         <string name="converter">Converter</string>
         <string name="nenhum_recurso">Nenhum recurso encontrado.</string>
 
+        <string-array name="moedas_array">
+                <item>(selecionar moeda)</item>
+                <item>BRL</item>
+                <item>BTC</item>
+                <item>ETH</item>
+                <item>EUR</item>
+                <item>USD</item>
+        </string-array>
 
 </resources>

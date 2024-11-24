@@ -5,17 +5,15 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etOrigem"
+    <Spinner
+        android:id="@+id/comboBoxOrigem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Moeda de Origem" />
+        android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/etDestino"
+    <Spinner
+        android:id="@+id/comboBoxDestino"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Moeda de Destino" />
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/etValor"
@@ -34,9 +32,9 @@
         android:id="@+id/tvResultado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Resultado"
-        android:textSize="18sp"
+        android:gravity="center"
         android:padding="10dp"
-        android:gravity="center" />
+        android:text="Resultado"
+        android:textSize="18sp" />
 
 </LinearLayout>

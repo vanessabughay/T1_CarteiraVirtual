@@ -2,8 +2,10 @@ package com.example.carteiravirtual
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,15 +25,34 @@ class ConverterRecursosActivity : AppCompatActivity() {
 
         dbHelper = DBHelper(this)
 
-        val etOrigem: EditText = findViewById(R.id.etOrigem)
-        val etDestino: EditText = findViewById(R.id.etDestino)
+
         val etValor: EditText = findViewById(R.id.etValor)
         val btnConverter: Button = findViewById(R.id.btnConverter)
         val tvResultado: TextView = findViewById(R.id.tvResultado)
 
+        val comboBoxOrigem: Spinner = findViewById(R.id.comboBoxOrigem)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.moedas_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            comboBoxOrigem.adapter = adapter
+        }
+
+        val comboBoxDestino: Spinner = findViewById(R.id.comboBoxDestino)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.moedas_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            comboBoxDestino.adapter = adapter
+        }
+
         btnConverter.setOnClickListener {
-            val origem = etOrigem.text.toString()
-            val destino = etDestino.text.toString()
+            val origem = comboBoxOrigem.selectedItem.toString()
+            val destino = comboBoxDestino.selectedItem.toString()
             val valor = etValor.text.toString().toDoubleOrNull()
 
             if (valor == null || valor <= 0) {
@@ -85,6 +106,8 @@ class ConverterRecursosActivity : AppCompatActivity() {
             null  // Retorna null em caso de erro
         }
     }
+
+
 
 }
 
