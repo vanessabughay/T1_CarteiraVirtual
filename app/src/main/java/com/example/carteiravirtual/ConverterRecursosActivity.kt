@@ -88,7 +88,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
             }
         }
     }
-
+/*
     // Função para obter a cotação da API
     private suspend fun obterCotacao(origem: String, destino: String): Double? {
         return try {
@@ -97,17 +97,37 @@ class ConverterRecursosActivity : AppCompatActivity() {
 
             // A resposta pode ser aninhada, então é necessário acessar o valor correto.
             resposta?.let {
+
                 val cotacao = it.BRLUSD?.bid
                 return cotacao
-            //    val cotacao = it.cotações[moedas]
-            //    return cotacao?.bid
+
             }
         } catch (e: Exception) {
             null  // Retorna null em caso de erro
         }
     }
+*/
 
+    private suspend fun obterCotacao(origem: String, destino: String): Double? {
+        return try {
+            val moedas = "$origem$destino"  // Exemplo: "BRLUSD"
+            val resposta = ApiClient.awesomeAPI.getCotacao("$origem-$destino") // Chama a API com a combinação correta
 
+            resposta?.let {
+                // Usa Reflection para acessar a propriedade dinamicamente
+                val propriedade = it::class.members.firstOrNull { member ->
+                    member.name == moedas
+                }?.call(it) as? MoedaCotacao
+
+                val cotacao = propriedade?.bid
+                println("Cotação obtida para $moedas: $cotacao")
+                return cotacao
+            }
+        } catch (e: Exception) {
+            println("Erro ao obter cotação: ${e.message}")
+            null  // Retorna null em caso de erro
+        }
+    }
 
 }
 
