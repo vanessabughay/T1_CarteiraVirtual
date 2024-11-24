@@ -111,22 +111,43 @@ class ConverterRecursosActivity : AppCompatActivity() {
     private suspend fun obterCotacao(origem: String, destino: String): Double? {
         return try {
             val moedas = "$origem$destino"  // Exemplo: "BRLUSD"
-            val resposta = ApiClient.awesomeAPI.getCotacao("$origem-$destino") // Chama a API com a combinação correta
+            val resposta = ApiClient.awesomeAPI.getCotacao("$origem-$destino")
 
             resposta?.let {
-                // Usa Reflection para acessar a propriedade dinamicamente
-                val propriedade = it::class.members.firstOrNull { member ->
-                    member.name == moedas
-                }?.call(it) as? MoedaCotacao
+                val cotacao = when (moedas) {
+                    "BRLETH" -> it.calculoBRLETH  // Acessa a cotação calculada diretamente
+                    "BRLBTC" -> it.calculoBRLBTC
+                    "ETHBTC" -> it.calculoETHBTC
+                    "EURETH" -> it.calculoEURETH
+                    "EURBTC" -> it.calculoEURBTC
+                    "USDETH" -> it.calculoUSDETH
+                    "USDBTC" -> it.calculoUSDBTC
+                    "BTCETH" -> it.calculoBTCETH
+                    else -> {
+                        // Se não for uma das cotações fixas, buscar dinamicamente
+                        it::class.members.firstOrNull { member ->
+                            member.name == moedas
+                        }?.call(it) as? MoedaCotacao
+                    }
+                }
 
-                val cotacao = propriedade?.bid
-                println("Cotação obtida para $moedas: $cotacao")
-                return cotacao
+
+                // Verifica se a cotação foi encontrada
+                cotacao?.let {
+                    println("Cotação obtida para $moedas: ${it.bid}")
+                    return it.bid  // Retorna o valor da cotação
+                } ?: run {
+                    println("Cotação não encontrada para $moedas")
+                    null  // Se não encontrar a cotação, retorna null
+                }
+
             }
+
         } catch (e: Exception) {
             println("Erro ao obter cotação: ${e.message}")
             null  // Retorna null em caso de erro
         }
+
     }
 
 }
