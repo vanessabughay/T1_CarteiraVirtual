@@ -1,7 +1,6 @@
 package com.example.carteiravirtual
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -12,12 +11,17 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.reflect.full.memberProperties
-
 
 class ConverterRecursosActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: DBHelper
+
+    // Variáveis para os componentes da interface
+    private lateinit var comboBoxOrigem: Spinner
+    private lateinit var comboBoxDestino: Spinner
+    private lateinit var etValor: EditText
+    private lateinit var btnConverter: Button
+    private lateinit var tvResultado: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +29,14 @@ class ConverterRecursosActivity : AppCompatActivity() {
 
         dbHelper = DBHelper(this)
 
+        // Inicializando os componentes da interface
+        comboBoxOrigem = findViewById(R.id.comboBoxOrigem)
+        comboBoxDestino = findViewById(R.id.comboBoxDestino)
+        etValor = findViewById(R.id.etValor)
+        btnConverter = findViewById(R.id.btnConverter)
+        tvResultado = findViewById(R.id.tvResultado)
 
-        val etValor: EditText = findViewById(R.id.etValor)
-        val btnConverter: Button = findViewById(R.id.btnConverter)
-        val tvResultado: TextView = findViewById(R.id.tvResultado)
-
-        val comboBoxOrigem: Spinner = findViewById(R.id.comboBoxOrigem)
+        // Configurando os Spinners com as moedas disponíveis
         ArrayAdapter.createFromResource(
             this,
             R.array.moedas_array,
@@ -38,18 +44,10 @@ class ConverterRecursosActivity : AppCompatActivity() {
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             comboBoxOrigem.adapter = adapter
-        }
-
-        val comboBoxDestino: Spinner = findViewById(R.id.comboBoxDestino)
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.moedas_array,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             comboBoxDestino.adapter = adapter
         }
 
+        // Ação do botão de conversão
         btnConverter.setOnClickListener {
             val origem = comboBoxOrigem.selectedItem.toString()
             val destino = comboBoxDestino.selectedItem.toString()
@@ -75,7 +73,11 @@ class ConverterRecursosActivity : AppCompatActivity() {
                             val saldoDestino = dbHelper.buscarSaldo(destino)
                             dbHelper.salvarSaldo(destino, saldoDestino + valorConvertido)
 
+                            // Exibe o resultado da conversão
                             tvResultado.text = "Valor convertido: %.2f $destino".format(valorConvertido)
+
+                            // Retorna o saldo atualizado para a MainActivity
+                            setResult(RESULT_OK, intent.putExtra("novoSaldo", dbHelper.buscarSaldo("BRL")))
                         } else {
                             tvResultado.text = "Erro ao obter cotação. Tente novamente."
                         }
@@ -88,26 +90,8 @@ class ConverterRecursosActivity : AppCompatActivity() {
             }
         }
     }
-/*
+
     // Função para obter a cotação da API
-    private suspend fun obterCotacao(origem: String, destino: String): Double? {
-        return try {
-            val moedas = "$origem-$destino"  // Exemplo: "BRL-USD"
-            val resposta = ApiClient.awesomeAPI.getCotacao(moedas)
-
-            // A resposta pode ser aninhada, então é necessário acessar o valor correto.
-            resposta?.let {
-
-                val cotacao = it.BRLUSD?.bid
-                return cotacao
-
-            }
-        } catch (e: Exception) {
-            null  // Retorna null em caso de erro
-        }
-    }
-*/
-
     private suspend fun obterCotacao(origem: String, destino: String): Double? {
         return try {
             val moedas = "$origem$destino"  // Exemplo: "BRLUSD"
@@ -115,7 +99,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
 
             resposta?.let {
                 val cotacao = when (moedas) {
-                    "BRLETH" -> it.calculoBRLETH  // Acessa a cotação calculada diretamente
+                    "BRLETH" -> it.calculoBRLETH
                     "BRLBTC" -> it.calculoBRLBTC
                     "ETHBTC" -> it.calculoETHBTC
                     "EURETH" -> it.calculoEURETH
@@ -125,35 +109,20 @@ class ConverterRecursosActivity : AppCompatActivity() {
                     "BTCETH" -> it.calculoBTCETH
                     else -> {
                         // Se não for uma das cotações fixas, buscar dinamicamente
-                        it::class.members.firstOrNull { member ->
-                            member.name == moedas
-                        }?.call(it) as? MoedaCotacao
+                        it::class.members.firstOrNull { member -> member.name == moedas }
+                            ?.call(it) as? MoedaCotacao
                     }
                 }
 
-
                 // Verifica se a cotação foi encontrada
                 cotacao?.let {
-                    println("Cotação obtida para $moedas: ${it.bid}")
                     return it.bid  // Retorna o valor da cotação
                 } ?: run {
-                    println("Cotação não encontrada para $moedas")
                     null  // Se não encontrar a cotação, retorna null
                 }
-
             }
-
         } catch (e: Exception) {
-            println("Erro ao obter cotação: ${e.message}")
             null  // Retorna null em caso de erro
         }
-
     }
-
 }
-
-
-
-
-
-

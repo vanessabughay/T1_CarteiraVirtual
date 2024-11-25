@@ -5,27 +5,31 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Exibição do saldo atual em BRL -->
     <TextView
         android:id="@+id/tvSaldo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Saldo: R$ 0.00"
+        android:text="Saldo Atual em BRL: R$ 0.00"
         android:textSize="18sp"
         android:padding="10dp"
         android:gravity="center" />
 
+    <!-- Botão para realizar o depósito -->
     <Button
         android:id="@+id/btnDepositar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Depositar R$" />
 
+    <!-- Botão para listar recursos -->
     <Button
         android:id="@+id/btnListarRecursos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Listar Recursos" />
 
+    <!-- Botão para realizar a conversão -->
     <Button
         android:id="@+id/btnConverter"
         android:layout_width="match_parent"

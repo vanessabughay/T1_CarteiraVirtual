@@ -5,29 +5,39 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Spinner para selecionar a moeda de origem -->
     <Spinner
         android:id="@+id/comboBoxOrigem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:minHeight="48dp" />
 
+    <!-- Spinner para selecionar a moeda de destino -->
     <Spinner
         android:id="@+id/comboBoxDestino"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:minHeight="48dp" />
 
+    <!-- Campo de entrada para o valor a ser convertido -->
     <EditText
         android:id="@+id/etValor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Valor a ser convertido"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:minHeight="48dp" />
 
+
+
+    <!-- Botão para acionar a conversão -->
     <Button
         android:id="@+id/btnConverter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Converter" />
 
+    <!-- Exibição do resultado da conversão -->
     <TextView
         android:id="@+id/tvResultado"
         android:layout_width="match_parent"
