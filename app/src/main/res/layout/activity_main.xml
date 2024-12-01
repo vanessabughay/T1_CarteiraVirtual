@@ -1,79 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:padding="16dp">
 
+    <!-- Exibição do saldo atual em BRL -->
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvSaldo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Carteira Virtual"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.098" />
+        android:text="Saldo Atual em BRL: R$ 0.00"
+        android:textSize="18sp"
+        android:padding="10dp"
+        android:gravity="center" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Seu saldo é:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <TextView
-        android:id="@+id/MainSaldo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="R$"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.033" />
-
+    <!-- Botão para realizar o depósito -->
     <Button
-        android:id="@+id/MainDepositar"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnDepositar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:text="DEPOSITAR R$"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/MainSaldo"
-        app:layout_constraintVertical_bias="0.0" />
+        android:text="Depositar R$" />
 
+    <!-- Botão para listar recursos -->
     <Button
-        android:id="@+id/MainListar"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnListarRecursos"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="LISTAR RECURSOS"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/MainDepositar"
-        app:layout_constraintVertical_bias="0.134" />
+        android:text="Listar Recursos" />
 
+    <!-- Botão para realizar a conversão -->
     <Button
-        android:id="@+id/MainConverter"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnConverter"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CONVERTER RECURSOS"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/MainListar"
-        app:layout_constraintVertical_bias="0.235" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="Converter Recursos" />
+</LinearLayout>

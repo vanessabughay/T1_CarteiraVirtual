@@ -1,3 +1,25 @@
 <resources>
-    <string name="app_name">CarteiraVirtual</string>
+
+        <string name="app_name">Carteira Virtual</string>
+        <string name="depositar">Depositar R$</string>
+        <string name="listar_recursos">Listar Recursos</string>
+        <string name="converter_recursos">Converter Recursos</string>
+        <string name="saldo_em">Saldo em R$:</string>
+        <string name="digite_valor">Digite o valor a depositar</string>
+        <string name="confirmar_deposito">Confirmar Depósito</string>
+        <string name="moeda_origem">Moeda de origem (ex: BRL)</string>
+        <string name="moeda_destino">Moeda de destino (ex: USD)</string>
+        <string name="digite_valor_converter">Digite o valor a converter</string>
+        <string name="converter">Converter</string>
+        <string name="nenhum_recurso">Nenhum recurso encontrado.</string>
+
+        <string-array name="moedas_array">
+                <item>(selecionar moeda)</item>
+                <item>BRL</item>
+                <item>BTC</item>
+                <item>ETH</item>
+                <item>EUR</item>
+                <item>USD</item>
+        </string-array>
+
 </resources>
