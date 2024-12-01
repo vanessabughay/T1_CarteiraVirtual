@@ -95,34 +95,176 @@ class ConverterRecursosActivity : AppCompatActivity() {
     private suspend fun obterCotacao(origem: String, destino: String): Double? {
         return try {
             val moedas = "$origem$destino"  // Exemplo: "BRLUSD"
-            val resposta = ApiClient.awesomeAPI.getCotacao("$origem-$destino")
 
-            resposta?.let {
-                val cotacao = when (moedas) {
-                    "BRLETH" -> it.calculoBRLETH
-                    "BRLBTC" -> it.calculoBRLBTC
-                    "ETHBTC" -> it.calculoETHBTC
-                    "EURETH" -> it.calculoEURETH
-                    "EURBTC" -> it.calculoEURBTC
-                    "USDETH" -> it.calculoUSDETH
-                    "USDBTC" -> it.calculoUSDBTC
-                    "BTCETH" -> it.calculoBTCETH
-                    else -> {
-                        // Se não for uma das cotações fixas, buscar dinamicamente
-                        it::class.members.firstOrNull { member -> member.name == moedas }
-                            ?.call(it) as? MoedaCotacao
-                    }
+            // Lista de cotações específicas que usam funções separadas
+            val cotacoesEspecificas = listOf(
+                "BRLETH", "BRLBTC", "ETHBTC", "EURETH",
+                "EURBTC", "USDETH", "USDBTC", "BTCETH"
+            )
+
+            if (moedas in cotacoesEspecificas) {
+                // Chamar a função específica para a cotação
+                when (moedas) {
+                    "BRLETH" -> calculoBRLETH()
+                    "BRLBTC" -> calculoBRLBTC()
+                    "ETHBTC" -> calculoETHBTC()
+                    "EURETH" -> calculoEURETH()
+                    "EURBTC" -> calculoEURBTC()
+                    "USDETH" -> calculoUSDETH()
+                    "USDBTC" -> calculoUSDBTC()
+                    "BTCETH" -> calculoBTCETH()
+                    else -> null
                 }
-
-                // Verifica se a cotação foi encontrada
-                cotacao?.let {
-                    return it.bid  // Retorna o valor da cotação
-                } ?: run {
-                    null  // Se não encontrar a cotação, retorna null
+            } else {
+                // Obter cotação de forma dinâmica para outras combinações
+                val resposta = ApiClient.awesomeAPI.getCotacao("$origem-$destino")
+                resposta?.let {
+                    val property = it::class.members.firstOrNull { member -> member.name == moedas }
+                    val cotacao = property?.call(it) as? MoedaCotacao
+                    cotacao?.bid
                 }
             }
         } catch (e: Exception) {
             null  // Retorna null em caso de erro
         }
     }
+
+    private suspend fun calculoBRLETH(): Double? {
+        return try {
+            // Buscar a cotação de ETH para BRL
+            val resposta = ApiClient.awesomeAPI.getCotacao("ETH-BRL")
+
+            resposta?.let {
+                val cotacao = it.ETHBRL?.bid // Obtém o valor do bid (preço de venda)
+                cotacao?.let { valor ->
+                    1 / valor // Retorna o inverso do câmbio
+                }
+            }
+        } catch (e: Exception) {
+            null // Retorna null em caso de erro
+        }
+    }
+
+    private suspend fun calculoBRLBTC(): Double? {
+        return try {
+            // Buscar a cotação de BTC para BRL
+            val resposta = ApiClient.awesomeAPI.getCotacao("BTC-BRL")
+
+            resposta?.let {
+                val cotacao = it.BTCBRL?.bid // Obtém o valor do bid (preço de venda)
+                cotacao?.let { valor ->
+                    1 / valor // Retorna o inverso do câmbio
+                }
+            }
+        } catch (e: Exception) {
+            null // Retorna null em caso de erro
+        }
+    }
+
+    private suspend fun calculoETHBTC(): Double? {
+        return try {
+            // Buscar as cotações ETH-USD e BTC-USD
+            val respostaETHUSD = ApiClient.awesomeAPI.getCotacao("ETH-USD")
+            val respostaBTCUSD = ApiClient.awesomeAPI.getCotacao("BTC-USD")
+
+            val cotacaoETHUSD = respostaETHUSD?.ETHUSD?.bid // Cotação de ETH para USD
+            val cotacaoBTCUSD = respostaBTCUSD?.BTCUSD?.bid // Cotação de BTC para USD
+
+            // Verifica se ambas as cotações são válidas e calcula ETHBTC como ETHUSD / BTCUSD
+            if (cotacaoETHUSD != null && cotacaoBTCUSD != null && cotacaoBTCUSD != 0.0) {
+                cotacaoETHUSD / cotacaoBTCUSD
+            } else {
+                null // Retorna null se houver problema com as cotações
+            }
+        } catch (e: Exception) {
+            null // Retorna null em caso de erro
+        }
+    }
+
+
+    private suspend fun calculoEURETH(): Double? {
+        return try {
+            // Buscar a cotação de BTC para BRL
+            val resposta = ApiClient.awesomeAPI.getCotacao("ETH-EUR")
+
+            resposta?.let {
+                val cotacao = it.ETHEUR?.bid // Obtém o valor do bid (preço de venda)
+                cotacao?.let { valor ->
+                    1 / valor // Retorna o inverso do câmbio
+                }
+            }
+        } catch (e: Exception) {
+            null // Retorna null em caso de erro
+        }
+    }
+
+    private suspend fun calculoEURBTC(): Double? {
+        return try {
+            // Buscar a cotação de BTC para BRL
+            val resposta = ApiClient.awesomeAPI.getCotacao("BTC-EUR")
+
+            resposta?.let {
+                val cotacao = it.BTCEUR?.bid // Obtém o valor do bid (preço de venda)
+                cotacao?.let { valor ->
+                    1 / valor // Retorna o inverso do câmbio
+                }
+            }
+        } catch (e: Exception) {
+            null // Retorna null em caso de erro
+        }
+    }
+
+    private suspend fun calculoUSDETH(): Double? {
+        return try {
+            // Buscar a cotação de BTC para BRL
+            val resposta = ApiClient.awesomeAPI.getCotacao("USD-ETH")
+
+            resposta?.let {
+                val cotacao = it.ETHUSD?.bid // Obtém o valor do bid (preço de venda)
+                cotacao?.let { valor ->
+                    1 / valor // Retorna o inverso do câmbio
+                }
+            }
+        } catch (e: Exception) {
+            null // Retorna null em caso de erro
+        }
+    }
+
+    private suspend fun calculoUSDBTC(): Double? {
+        return try {
+            // Buscar a cotação de BTC para BRL
+            val resposta = ApiClient.awesomeAPI.getCotacao("BTC-USC")
+
+            resposta?.let {
+                val cotacao = it.BTCUSD?.bid // Obtém o valor do bid (preço de venda)
+                cotacao?.let { valor ->
+                    1 / valor // Retorna o inverso do câmbio
+                }
+            }
+        } catch (e: Exception) {
+            null // Retorna null em caso de erro
+        }
+    }
+
+    private suspend fun calculoBTCETH(): Double? {
+        return try {
+            // Buscar as cotações ETH-USD e BTC-USD
+            val respostaETHUSD = ApiClient.awesomeAPI.getCotacao("ETH-USD")
+            val respostaBTCUSD = ApiClient.awesomeAPI.getCotacao("BTC-USD")
+
+            val cotacaoETHUSD = respostaETHUSD?.ETHUSD?.bid // Cotação de ETH para USD
+            val cotacaoBTCUSD = respostaBTCUSD?.BTCUSD?.bid // Cotação de BTC para USD
+
+            // Verifica se ambas as cotações são válidas e calcula ETHBTC como ETHUSD / BTCUSD
+            if (cotacaoETHUSD != null && cotacaoBTCUSD != null && cotacaoBTCUSD != 0.0) {
+                cotacaoBTCUSD / cotacaoETHUSD
+            } else {
+                null // Retorna null se houver problema com as cotações
+            }
+        } catch (e: Exception) {
+            null // Retorna null em caso de erro
+        }
+    }
+
+
 }
