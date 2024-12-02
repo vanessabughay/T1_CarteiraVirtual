@@ -25,6 +25,14 @@ class ConverterRecursosActivity : AppCompatActivity() {
     private lateinit var btnConverter: Button
     private lateinit var tvResultado: TextView
 
+    private val moedaMap = mapOf(
+        "BRL - Real Brasileiro" to "BRL",
+        "USD - Dólar Americano" to "USD",
+        "EUR - Euro" to "EUR",
+        "ETH - Ethereum" to "ETH",
+        "BTC - Bitcoin" to "BTC"
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_converter_recursos)
@@ -51,14 +59,15 @@ class ConverterRecursosActivity : AppCompatActivity() {
 
         // Ação do botão de conversão
         btnConverter.setOnClickListener {
-            val origem = comboBoxOrigem.selectedItem.toString()
-            val destino = comboBoxDestino.selectedItem.toString()
+            val origem = moedaMap[comboBoxOrigem.selectedItem.toString()] ?: return@setOnClickListener
+            val destino = moedaMap[comboBoxDestino.selectedItem.toString()] ?: return@setOnClickListener
             val valor = etValor.text.toString().toDoubleOrNull()
 
             if (valor == null || valor <= 0) {
                 Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
 
             // Verificando saldo antes de tentar converter
             val saldoOrigem = dbHelper.buscarSaldo(origem)

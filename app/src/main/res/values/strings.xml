@@ -15,11 +15,11 @@
 
         <string-array name="moedas_array">
                 <item>(selecionar moeda)</item>
-                <item>BRL</item>
-                <item>BTC</item>
-                <item>ETH</item>
-                <item>EUR</item>
-                <item>USD</item>
+                <item>BRL - Real Brasileiro</item>
+                <item>BTC - Bitcoin</item>
+                <item>ETH - Ethereum</item>
+                <item>EUR - Euro</item>
+                <item>USD - Dólar Americano</item>
         </string-array>
 
 </resources>
