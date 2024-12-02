@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun exibirSaldo() {
         val saldo = dbHelper.buscarSaldo("BRL") // "BRL" é o Real
-        tvSaldo.text = "Saldo em R$: %.2f".format(saldo)
+        tvSaldo.text = "Saldo em R$: ${formatarSaldo(saldo)}"
     }
 
     // Captura o resultado da atividade de depósito ou conversão
@@ -57,7 +60,17 @@ class MainActivity : AppCompatActivity() {
             val novoSaldo = data.getDoubleExtra("novoSaldo", 0.0)
 
             // Atualiza o saldo exibido na MainActivity
-            tvSaldo.text = "Saldo em R$: %.2f".format(novoSaldo)
+            tvSaldo.text = "Saldo em R$: ${formatarSaldo(novoSaldo)}"
         }
     }
+    // Método para formatar o saldo em reais
+    private fun formatarSaldo(valor: Double): String {
+        val symbols = DecimalFormatSymbols(Locale.US).apply {
+            groupingSeparator = '.'
+            decimalSeparator = ','
+        }
+        val decimalFormat = DecimalFormat("#,##0.00", symbols)
+        return decimalFormat.format(valor)
+    }
+
 }

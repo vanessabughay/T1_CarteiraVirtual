@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.*
 
 class ConverterRecursosActivity : AppCompatActivity() {
 
@@ -74,7 +76,8 @@ class ConverterRecursosActivity : AppCompatActivity() {
                             dbHelper.salvarSaldo(destino, saldoDestino + valorConvertido)
 
                             // Exibe o resultado da conversão
-                            tvResultado.text = "Valor convertido: %.2f $destino".format(valorConvertido)
+                            // tvResultado.text = "Valor convertido: %.2f $destino".format(valorConvertido)
+                            tvResultado.text = "Valor convertido: ${valorConvertido.formatarMoeda(destino)} $destino"
 
                             // Retorna o saldo atualizado para a MainActivity
                             setResult(RESULT_OK, intent.putExtra("novoSaldo", dbHelper.buscarSaldo("BRL")))
@@ -264,6 +267,17 @@ class ConverterRecursosActivity : AppCompatActivity() {
         } catch (e: Exception) {
             null // Retorna null em caso de erro
         }
+    }
+    // Função de extensão para formatar números conforme a moeda e o formato brasileiro
+    fun Double.formatarMoeda(moeda: String): String {
+        val formato = NumberFormat.getNumberInstance(Locale("pt", "BR"))
+        formato.maximumFractionDigits = when (moeda) {
+            "BRL", "USD", "EUR" -> 2
+            "ETH", "BTC" -> 8
+            else -> 2
+        }
+        formato.minimumFractionDigits = formato.maximumFractionDigits
+        return formato.format(this)
     }
 
 
