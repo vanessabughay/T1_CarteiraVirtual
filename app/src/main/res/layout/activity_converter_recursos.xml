@@ -44,7 +44,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="Resultado"
         android:textSize="18sp" />
 
 </LinearLayout>
