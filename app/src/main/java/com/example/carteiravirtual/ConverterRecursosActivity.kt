@@ -7,6 +7,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -31,6 +32,8 @@ class ConverterRecursosActivity : AppCompatActivity() {
     private lateinit var btnConverter: Button
     private lateinit var tvResultado: TextView
     private lateinit var tvResultadoCompra: TextView
+    private lateinit var progressBar: ProgressBar
+
 
     private val moedaMap = mapOf(
         "BRL - Real Brasileiro" to "BRL",
@@ -55,6 +58,9 @@ class ConverterRecursosActivity : AppCompatActivity() {
         btnComprar = findViewById(R.id.btnComprar)
         tvResultado = findViewById(R.id.tvResultado)
         tvResultadoCompra= findViewById(R.id.ResultadoCompra)
+        progressBar = findViewById(R.id.progressBar)
+
+
 
         // Configurando os Spinners com as moedas disponíveis
         ArrayAdapter.createFromResource(
@@ -67,7 +73,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
             comboBoxDestino.adapter = adapter
         }
 
-        // Ação do botão de Comprar
+        // Ação do botão de Converter
         btnConverter.setOnClickListener {
             val origem =
                 moedaMap[comboBoxOrigem.selectedItem.toString()] ?: return@setOnClickListener
@@ -81,10 +87,22 @@ class ConverterRecursosActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Exibir ProgressBar
+            progressBar.visibility = View.VISIBLE
+
+
             // Inicia a conversão em uma corrotina
             CoroutineScope(Dispatchers.Main).launch {
+                val startTime = System.currentTimeMillis()
+
                 try {
                     val cotacao = obterCotacao(origem, destino)
+                    val elapsedTime = System.currentTimeMillis() - startTime
+                    val delayTime = maxOf(0, 2000 - elapsedTime)
+
+                    // Aguarde o tempo restante
+                    kotlinx.coroutines.delay(delayTime)
+                    progressBar.visibility = View.GONE
                     if (cotacao != null) {
                         val valorConvertido = valor * cotacao
 
@@ -96,6 +114,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
                         tvResultado.text = "Erro ao obter cotação. Tente novamente."
                     }
                 } catch (e: Exception) {
+                    progressBar.visibility = View.GONE
                     tvResultado.text = "Erro na conversão: ${e.message}"
                 }
             }
@@ -122,14 +141,21 @@ class ConverterRecursosActivity : AppCompatActivity() {
                     .show()
                 return@setOnClickListener
             }
+            // Exibir ProgressBar
+            progressBar.visibility = View.VISIBLE
 
             // Verificando saldo antes de tentar COMPRAR
             val saldoOrigem = dbHelper.buscarSaldo(origem)
             if (saldoOrigem >= valor) {
                 // Inicia a conversão e COMRPA em uma corrotina
                 CoroutineScope(Dispatchers.Main).launch {
+                    val startTime = System.currentTimeMillis()
                     try {
                         val cotacao = obterCotacao(origem, destino)
+                        val elapsedTime = System.currentTimeMillis() - startTime
+                        val delayTime = maxOf(0, 2000 - elapsedTime)
+                        kotlinx.coroutines.delay(delayTime)
+                        progressBar.visibility = View.GONE
                         if (cotacao != null) {
                             val valorConvertido = valor * cotacao
 

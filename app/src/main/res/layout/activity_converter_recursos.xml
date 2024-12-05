@@ -38,6 +38,15 @@
         android:layout_height="wrap_content"
         android:text="Converter" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
     <!-- Exibição do resultado da conversão -->
 
     <TextView
@@ -75,6 +84,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Comprar" />
+
+
+
+
+
 
     <TextView
         android:id="@+id/ResultadoCompra"
