@@ -1,6 +1,9 @@
 package com.example.carteiravirtual
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -8,6 +11,8 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+//import com.example.carteiravirtual.R.id.btnConverter
+//import androidx.compose.ui.semantics.text
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,8 +27,10 @@ class ConverterRecursosActivity : AppCompatActivity() {
     private lateinit var comboBoxOrigem: Spinner
     private lateinit var comboBoxDestino: Spinner
     private lateinit var etValor: EditText
+    private lateinit var btnComprar: Button
     private lateinit var btnConverter: Button
     private lateinit var tvResultado: TextView
+    private lateinit var tvResultadoCompra: TextView
 
     private val moedaMap = mapOf(
         "BRL - Real Brasileiro" to "BRL",
@@ -33,6 +40,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
         "BTC - Bitcoin" to "BTC"
     )
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_converter_recursos)
@@ -44,7 +52,9 @@ class ConverterRecursosActivity : AppCompatActivity() {
         comboBoxDestino = findViewById(R.id.comboBoxDestino)
         etValor = findViewById(R.id.etValor)
         btnConverter = findViewById(R.id.btnConverter)
+        btnComprar = findViewById(R.id.btnComprar)
         tvResultado = findViewById(R.id.tvResultado)
+        tvResultadoCompra= findViewById(R.id.ResultadoCompra)
 
         // Configurando os Spinners com as moedas disponíveis
         ArrayAdapter.createFromResource(
@@ -57,22 +67,59 @@ class ConverterRecursosActivity : AppCompatActivity() {
             comboBoxDestino.adapter = adapter
         }
 
-        // Ação do botão de conversão
+        // Ação do botão de Comprar
         btnConverter.setOnClickListener {
-            val origem = moedaMap[comboBoxOrigem.selectedItem.toString()] ?: return@setOnClickListener
-            val destino = moedaMap[comboBoxDestino.selectedItem.toString()] ?: return@setOnClickListener
+            val origem =
+                moedaMap[comboBoxOrigem.selectedItem.toString()] ?: return@setOnClickListener
+            val destino =
+                moedaMap[comboBoxDestino.selectedItem.toString()] ?: return@setOnClickListener
             val valor = etValor.text.toString().toDoubleOrNull()
 
             if (valor == null || valor <= 0) {
-                Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
+            // Inicia a conversão em uma corrotina
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val cotacao = obterCotacao(origem, destino)
+                    if (cotacao != null) {
+                        val valorConvertido = valor * cotacao
 
-            // Verificando saldo antes de tentar converter
+                        // Exibe o resultado da conversão
+                        tvResultado.text =
+                            "Valor convertido: ${valorConvertido.formatarMoeda(destino)} $destino"
+
+                    } else {
+                        tvResultado.text = "Erro ao obter cotação. Tente novamente."
+                    }
+                } catch (e: Exception) {
+                    tvResultado.text = "Erro na conversão: ${e.message}"
+                }
+            }
+        }
+
+        // Ação do botão de Comprar
+        btnComprar.setOnClickListener {
+
+            val origem =
+                moedaMap[comboBoxOrigem.selectedItem.toString()] ?: return@setOnClickListener
+            val destino =
+                moedaMap[comboBoxDestino.selectedItem.toString()] ?: return@setOnClickListener
+            val valor = etValor.text.toString().toDoubleOrNull()
+
+            if (valor == null || valor <= 0) {
+                Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
+
+            // Verificando saldo antes de tentar COMPRAR
             val saldoOrigem = dbHelper.buscarSaldo(origem)
             if (saldoOrigem >= valor) {
-                // Inicia a conversão em uma corrotina
+                // Inicia a conversão e COMRPA em uma corrotina
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
                         val cotacao = obterCotacao(origem, destino)
@@ -80,25 +127,91 @@ class ConverterRecursosActivity : AppCompatActivity() {
                             val valorConvertido = valor * cotacao
 
                             // Atualiza os saldos após a conversão
+
                             dbHelper.salvarSaldo(origem, saldoOrigem - valor)
                             val saldoDestino = dbHelper.buscarSaldo(destino)
                             dbHelper.salvarSaldo(destino, saldoDestino + valorConvertido)
 
-                            // Exibe o resultado da conversão
-                            // tvResultado.text = "Valor convertido: %.2f $destino".format(valorConvertido)
-                            tvResultado.text = "Valor convertido: ${valorConvertido.formatarMoeda(destino)} $destino"
+                            // Atualiza Saldo
+                            val textViewSaldo1 = findViewById<TextView>(R.id.tvSaldo1)
+                            val saldo1 = dbHelper.buscarSaldo(origem)
+                            textViewSaldo1.text =
+                                "Saldo: ${saldo1.formatarMoeda(origem)} $origem" //$valorSelecionado1"
+
+                            val textViewSaldo2 = findViewById<TextView>(R.id.tvSaldo2)
+                            val saldo2 = dbHelper.buscarSaldo(destino)
+                            textViewSaldo2.text =
+                                "Saldo: ${saldo2.formatarMoeda(destino)} $destino" //$valorSelecionado1"
 
                             // Retorna o saldo atualizado para a MainActivity
-                            setResult(RESULT_OK, intent.putExtra("novoSaldo", dbHelper.buscarSaldo("BRL")))
+                            setResult(
+                                RESULT_OK,
+                                intent.putExtra("novoSaldo", dbHelper.buscarSaldo("BRL"))
+                            )
                         } else {
-                            tvResultado.text = "Erro ao obter cotação. Tente novamente."
+                            tvResultadoCompra.text = "Erro ao obter cotação. Tente novamente."
                         }
                     } catch (e: Exception) {
-                        tvResultado.text = "Erro na conversão: ${e.message}"
+                        tvResultadoCompra.text = "Erro na conversão: ${e.message}"
                     }
                 }
             } else {
-                tvResultado.text = "Saldo insuficiente na moeda de origem."
+                tvResultadoCompra.text = "Saldo insuficiente na moeda de origem."
+            }
+        }
+
+
+        //saldo 1 campo de origem
+        comboBoxOrigem.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            val textViewSaldo1 = findViewById<TextView>(R.id.tvSaldo1)
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val valorSelecionado1 = parent?.getItemAtPosition(position).toString()
+
+                // Verifica se a opção "Selecionar valor" está selecionada
+                if (valorSelecionado1 == "(selecionar moeda)") {
+                    textViewSaldo1.text = "-"
+                } else {
+                    val valorSelecionado1 =
+                        moedaMap[parent?.getItemAtPosition(position).toString()] ?: return
+                    val saldo1 = dbHelper.buscarSaldo(valorSelecionado1)
+                    textViewSaldo1.text =
+                        "Saldo: ${saldo1.formatarMoeda(valorSelecionado1)} $valorSelecionado1"
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
+        //saldo 2 campo de destino
+        comboBoxDestino.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            val textViewSaldo2 = findViewById<TextView>(R.id.tvSaldo2)
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val valorSelecionado2 = parent?.getItemAtPosition(position).toString()
+
+                // Verifica se a opção "Selecionar valor" está selecionada
+                if (valorSelecionado2 == "(selecionar moeda)") {
+                    textViewSaldo2.text = "-"
+                } else {
+                    val valorSelecionado2 =
+                        moedaMap[parent?.getItemAtPosition(position).toString()] ?: return
+                    val saldo1 = dbHelper.buscarSaldo(valorSelecionado2)
+                    textViewSaldo2.text =
+                        "Saldo: ${saldo1.formatarMoeda(valorSelecionado2)} $valorSelecionado2"
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
     }
@@ -277,6 +390,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
             null // Retorna null em caso de erro
         }
     }
+
     // Função de extensão para formatar números conforme a moeda e o formato brasileiro
     fun Double.formatarMoeda(moeda: String): String {
         val formato = NumberFormat.getNumberInstance(Locale("pt", "BR"))
