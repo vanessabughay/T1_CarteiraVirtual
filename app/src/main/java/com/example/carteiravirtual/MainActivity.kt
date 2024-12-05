@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Botão para realizar a conversão
-        findViewById<Button>(R.id.btnConverter).setOnClickListener {
+        findViewById<Button>(R.id.btnComprar).setOnClickListener {
             val intent = Intent(this, ConverterRecursosActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_CONVERSAO)
         }
