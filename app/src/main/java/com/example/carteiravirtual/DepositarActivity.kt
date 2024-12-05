@@ -20,6 +20,11 @@ class DepositarActivity : AppCompatActivity() {
         val etValor: EditText = findViewById(R.id.etValor)
         val btnConfirmar: Button = findViewById(R.id.btnConfirmar)
 
+        val btnVoltar1: Button = findViewById(R.id.btnVoltar1)
+        btnVoltar1.setOnClickListener {
+            finish()
+        }
+
         btnConfirmar.setOnClickListener {
             val valor = etValor.text.toString().toDoubleOrNull()
 

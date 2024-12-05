@@ -101,6 +101,13 @@ class ConverterRecursosActivity : AppCompatActivity() {
             }
         }
 
+        // botão voltar
+        val btnVoltar3: Button = findViewById(R.id.btnVoltar3)
+        btnVoltar3.setOnClickListener {
+            finish()
+        }
+
+
         // Ação do botão de Comprar
         btnComprar.setOnClickListener {
 

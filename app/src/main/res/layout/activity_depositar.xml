@@ -11,12 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Valor a ser depositado"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal"
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/btnConfirmar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Confirmar Depósito"/>
+
+    <Button
+        android:id="@+id/btnVoltar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Voltar" />
 </LinearLayout>
 
