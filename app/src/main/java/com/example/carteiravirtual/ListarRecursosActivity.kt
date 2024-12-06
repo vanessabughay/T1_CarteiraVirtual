@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
+import android.widget.Toast
 
 class ListarRecursosActivity : AppCompatActivity() {
 
@@ -26,6 +27,11 @@ class ListarRecursosActivity : AppCompatActivity() {
         val btnVoltar2: Button = findViewById(R.id.btnVoltar2)
         btnVoltar2.setOnClickListener {
             finish()
+        }
+
+        val btnLimparBanco: Button = findViewById(R.id.btnLimparBanco)
+        btnLimparBanco.setOnClickListener {
+            limparBanco()
         }
     }
 
@@ -52,6 +58,14 @@ class ListarRecursosActivity : AppCompatActivity() {
             layoutRecursos.addView(textView)  // Adiciona o TextView ao LinearLayout
         }
     }
+
+    // Metodo para limpar o banco
+    private fun limparBanco() {
+        dbHelper.clearDatabase()
+        listarRecursos()
+        Toast.makeText(this, "Banco de dados limpo com sucesso!", Toast.LENGTH_SHORT).show()
+    }
+
     // Metodo para formatar o nome da moeda
     private fun formatarNomeMoeda(codigoMoeda: String): String {
         val nome = moedaNomes[codigoMoeda] ?: "Moeda Desconhecida"

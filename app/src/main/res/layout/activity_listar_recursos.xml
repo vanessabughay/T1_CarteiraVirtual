@@ -32,4 +32,14 @@
         android:text="Voltar"
         android:textColor="#B9F6CA"
         android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnLimparBanco"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20pt"
+        android:backgroundTint="#0B0B0B"
+        android:text="Limpar Banco"
+        android:textColor="#FF001A"
+        android:textSize="16sp" />
 </LinearLayout>

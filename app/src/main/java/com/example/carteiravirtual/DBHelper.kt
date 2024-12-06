@@ -107,6 +107,13 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         }
         db.close()
     }
+
+    fun clearDatabase() {
+        val db = writableDatabase
+        db.execSQL("DELETE FROM $TABLE_NAME")
+        db.close()
+    }
+
 }
 
 // Classe de dados para armazenar as informações de cada recurso (moeda)
