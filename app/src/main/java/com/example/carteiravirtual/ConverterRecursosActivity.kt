@@ -1,6 +1,7 @@
 package com.example.carteiravirtual
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -194,18 +195,28 @@ class ConverterRecursosActivity : AppCompatActivity() {
                             val textViewSaldo1 = findViewById<TextView>(R.id.tvSaldo1)
                             val saldo1 = dbHelper.buscarSaldo(origem)
                             textViewSaldo1.text =
-                                "Saldo: ${saldo1.formatarMoeda(origem)} $origem" //$valorSelecionado1"
+                                "Saldo: ${saldo1.formatarMoeda(origem)} $origem"
 
                             val textViewSaldo2 = findViewById<TextView>(R.id.tvSaldo2)
                             val saldo2 = dbHelper.buscarSaldo(destino)
                             textViewSaldo2.text =
-                                "Saldo: ${saldo2.formatarMoeda(destino)} $destino" //$valorSelecionado1"
+                                "Saldo: ${saldo2.formatarMoeda(destino)} $destino"
 
                             // Retorna o saldo atualizado para a MainActivity
                             setResult(
                                 RESULT_OK,
                                 intent.putExtra("novoSaldo", dbHelper.buscarSaldo("BRL"))
                             )
+
+                            val builder = AlertDialog.Builder(this@ConverterRecursosActivity)
+                            builder.setTitle("Sucesso!")
+                            builder.setMessage("Compra realizada com sucesso!")
+                            builder.setPositiveButton("OK") { dialog, which ->
+                                // Não faz nada, apenas fecha o diálogo
+                            }
+                            val dialog = builder.create()
+                            dialog.show()
+
                         } else {
                             tvResultadoCompra.text = "Erro ao obter cotação. \nSelecione 2 moedas diferentes!"
                         }

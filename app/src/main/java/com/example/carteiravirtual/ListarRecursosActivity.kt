@@ -1,5 +1,6 @@
 package com.example.carteiravirtual
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
@@ -9,6 +10,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 
 class ListarRecursosActivity : AppCompatActivity() {
 
@@ -58,12 +60,36 @@ class ListarRecursosActivity : AppCompatActivity() {
             layoutRecursos.addView(textView)  // Adiciona o TextView ao LinearLayout
         }
     }
-
+    /*
     // Metodo para limpar o banco
     private fun limparBanco() {
         dbHelper.clearDatabase()
         listarRecursos()
         Toast.makeText(this, "Banco de dados limpo com sucesso!", Toast.LENGTH_SHORT).show()
+    }
+    */
+    private fun limparBanco() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Confirmação")
+        builder.setMessage("Tem certeza que deseja limpar o banco de dados?")
+
+        builder.setPositiveButton("OK") { dialog, which ->
+            dbHelper.clearDatabase()
+            listarRecursos()
+            Toast.makeText(this, "Banco de dados limpo com sucesso!", Toast.LENGTH_SHORT).show()
+            // retornar a tela inicial
+            val intent = Intent(this, MainActivity::class.java) // Substitua MainActivity pela sua tela inicial
+            startActivity(intent)
+            finish() // Fecha a Activity atual
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, which ->
+            // Não faz nada, apenas fecha o diálogo
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+
     }
 
     // Metodo para formatar o nome da moeda
