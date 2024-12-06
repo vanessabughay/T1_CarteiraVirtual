@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:hint="Valor a ser depositado"
         android:inputType="numberDecimal"
-        android:minHeight="48dp" />
+        android:digits="0123456789,"
+        android:minHeight="48dp"/>
 
     <Button
         android:id="@+id/btnConfirmar"

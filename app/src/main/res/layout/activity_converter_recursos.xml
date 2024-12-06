@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -27,9 +28,8 @@
         android:layout_height="wrap_content"
         android:hint="Valor a ser convertido"
         android:inputType="numberDecimal"
-        android:minHeight="48dp" />
-
-
+        android:digits="0123456789,"
+        android:minHeight="48dp"/>
 
     <!-- Botão para acionar a conversão -->
     <Button

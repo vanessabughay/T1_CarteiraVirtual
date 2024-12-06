@@ -26,7 +26,13 @@ class DepositarActivity : AppCompatActivity() {
         }
 
         btnConfirmar.setOnClickListener {
-            val valor = etValor.text.toString().toDoubleOrNull()
+            val numValor = obterDoubleDoInput(etValor)
+            if (numValor != null) {
+                Toast.makeText(this, "Valor convertido: $numValor", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Entrada inválida", Toast.LENGTH_SHORT).show()
+            }
+            val valor = numValor.toString().toDoubleOrNull()
 
             if (valor == null || valor <= 0) {
                 Toast.makeText(this, "Digite um valor válido para depositar!", Toast.LENGTH_SHORT).show()
@@ -53,4 +59,33 @@ class DepositarActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
     }
+
+    private fun obterDoubleDoInput(editText: EditText): Double? {
+        val texto = editText.text.toString().trim()
+        return try {
+            if (texto.isNotEmpty()) {
+                // Substitui vírgula por ponto para conversão
+                val textoNormalizado = texto.replace(',', '.')
+
+                // Verifica se há mais de 2 casas decimais
+                if (textoNormalizado.contains('.')) {
+                    val partes = textoNormalizado.split('.')
+                    if (partes.size > 1 && partes[1].length > 2) {
+                        throw IllegalArgumentException("Número com mais de 2 casas decimais")
+                    }
+                }
+
+                // Converte para Double
+                textoNormalizado.toDouble()
+            } else {
+                null // Retorna null se o campo estiver vazio
+            }
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(this, "Por favor, insira no máximo 2 casas decimais", Toast.LENGTH_SHORT).show()
+            null
+        } catch (e: NumberFormatException) {
+            null // Retorna null se a entrada for inválida
+        }
+    }
+
 }

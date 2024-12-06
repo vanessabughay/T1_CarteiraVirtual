@@ -34,7 +34,6 @@ class ConverterRecursosActivity : AppCompatActivity() {
     private lateinit var tvResultadoCompra: TextView
     private lateinit var progressBar: ProgressBar
 
-
     private val moedaMap = mapOf(
         "BRL - Real Brasileiro" to "BRL",
         "USD - Dólar Americano" to "USD",
@@ -61,7 +60,6 @@ class ConverterRecursosActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
 
 
-
         // Configurando os Spinners com as moedas disponíveis
         ArrayAdapter.createFromResource(
             this,
@@ -75,15 +73,17 @@ class ConverterRecursosActivity : AppCompatActivity() {
 
         // Ação do botão de Converter
         btnConverter.setOnClickListener {
+
             val origem =
                 moedaMap[comboBoxOrigem.selectedItem.toString()] ?: return@setOnClickListener
             val destino =
                 moedaMap[comboBoxDestino.selectedItem.toString()] ?: return@setOnClickListener
-            val valor = etValor.text.toString().toDoubleOrNull()
+            val numValor = obterDoubleDoInput(etValor, origem)
+            val valor = numValor.toString().toDoubleOrNull()
 
+            // Verifica se o valor é válido antes de proceder
             if (valor == null || valor <= 0) {
-                Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -134,13 +134,15 @@ class ConverterRecursosActivity : AppCompatActivity() {
                 moedaMap[comboBoxOrigem.selectedItem.toString()] ?: return@setOnClickListener
             val destino =
                 moedaMap[comboBoxDestino.selectedItem.toString()] ?: return@setOnClickListener
-            val valor = etValor.text.toString().toDoubleOrNull()
+            val numValor = obterDoubleDoInput(etValor, origem)
+            val valor = numValor.toString().toDoubleOrNull()
 
+            // Verifica se o valor é válido antes de proceder
             if (valor == null || valor <= 0) {
-                Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
             // Exibir ProgressBar
             progressBar.visibility = View.VISIBLE
 
@@ -436,5 +438,41 @@ class ConverterRecursosActivity : AppCompatActivity() {
         return formato.format(this)
     }
 
+
+    private fun obterDoubleDoInput(editText: EditText, moeda: String): Double? {
+        val texto = editText.text.toString().trim()
+        return try {
+            if (texto.isNotEmpty()) {
+                // Substitui vírgula por ponto para conversão
+                val textoNormalizado = texto.replace(',', '.')
+
+                // Define o limite de casas decimais com base na moeda
+                val limiteCasasDecimais = when (moeda.uppercase()) {
+                    "BRL", "USD", "EUR" -> 2
+                    "ETH", "BTC" -> 8
+                    else -> throw IllegalArgumentException("Moeda não suportada")
+                }
+
+                // Verifica o número de casas decimais
+                if (textoNormalizado.contains('.')) {
+                    val partes = textoNormalizado.split('.')
+                    if (partes.size > 1 && partes[1].length > limiteCasasDecimais) {
+                        throw IllegalArgumentException("Número com mais de $limiteCasasDecimais casas decimais para a moeda $moeda")
+                    }
+                }
+
+                // Converte para Double
+                textoNormalizado.toDouble()
+            } else {
+                null // Retorna null se o campo estiver vazio
+            }
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+            null
+        } catch (e: NumberFormatException) {
+            Toast.makeText(this, "Entrada inválida", Toast.LENGTH_SHORT).show()
+            null
+        }
+    }
 
 }
