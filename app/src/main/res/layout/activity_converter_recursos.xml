@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:textColor="#C8B9F6CA"
+        android:textColor="#FFEB3B"
         android:textSize="18sp" />
 
     <Space
@@ -107,7 +107,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:textColor="#EF0909"
+        android:textColor="#FFEB3B"
         android:textSize="18sp" />
 
     <Button

@@ -113,7 +113,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
                             "Valor convertido: ${valorConvertido.formatarMoeda(destino)} $destino"
 
                     } else {
-                        tvResultado.text = "Erro ao obter cotação. Tente novamente."
+                        tvResultado.text = "Erro ao obter cotação. \nSelecione 2 moedas diferentes!"
                     }
                 } catch (e: Exception) {
                     progressBar.visibility = View.GONE
@@ -188,7 +188,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
                                 intent.putExtra("novoSaldo", dbHelper.buscarSaldo("BRL"))
                             )
                         } else {
-                            tvResultadoCompra.text = "Erro ao obter cotação. Tente novamente."
+                            tvResultadoCompra.text = "Erro ao obter cotação. \nSelecione 2 moedas diferentes!"
                         }
                     } catch (e: Exception) {
                         tvResultadoCompra.text = "Erro na conversão: ${e.message}"
