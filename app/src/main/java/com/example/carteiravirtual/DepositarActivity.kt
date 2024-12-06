@@ -31,7 +31,7 @@ class DepositarActivity : AppCompatActivity() {
             if (numValor != null) {
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Depósito")
-                builder.setMessage("Valor depositado: ${String.format("%.2f", numValor)}")
+                builder.setMessage("Valor depositado: R$ ${String.format("%.2f", numValor)}")
                 builder.setPositiveButton("OK") { dialog, which ->
                     val valor = numValor.toString().toDoubleOrNull()
 
