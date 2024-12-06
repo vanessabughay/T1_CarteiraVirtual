@@ -187,6 +187,9 @@ class ConverterRecursosActivity : AppCompatActivity() {
                                 RESULT_OK,
                                 intent.putExtra("novoSaldo", dbHelper.buscarSaldo("BRL"))
                             )
+                            tvResultadoCompra.setTextColor(getColor(R.color.text_color))
+                            tvResultadoCompra.text = "Compra realizada com sucesso!"
+
                         } else {
                             tvResultadoCompra.text = "Erro ao obter cotação. Tente novamente."
                         }
@@ -196,6 +199,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
                 }
             } else {
                 progressBar.visibility = View.GONE
+                tvResultadoCompra.setTextColor(getColor(R.color.error_color))
                 tvResultadoCompra.text = "Saldo insuficiente na moeda de origem."
             }
         }

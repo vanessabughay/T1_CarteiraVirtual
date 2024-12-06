@@ -105,6 +105,7 @@
         android:id="@+id/ResultadoCompra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#E5121212"
         android:gravity="center"
         android:padding="10dp"
         android:textColor="#EF0909"
