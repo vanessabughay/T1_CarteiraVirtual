@@ -1,38 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:baselineAligned="false"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/geometrico"
+    android:gravity="top">
 
     <!-- Exibição do saldo atual em BRL -->
+
+    <!-- Botão para realizar o depósito -->
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/cambio" />
+
     <TextView
         android:id="@+id/tvSaldo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Saldo Atual em BRL: R$ 0.00"
-        android:textSize="18sp"
+        android:fontFamily="monospace"
+        android:gravity="center"
         android:padding="10dp"
-        android:gravity="center" />
+        android:text="Saldo Atual em BRL: R$ 0.00"
+        android:textColor="#B9F6CA"
+        android:textSize="20sp" />
 
-    <!-- Botão para realizar o depósito -->
     <Button
         android:id="@+id/btnDepositar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Depositar R$" />
+        android:backgroundTint="#0B0B0B"
+        android:fontFamily="monospace"
+        android:text="Depositar R$"
+        android:textColor="#B9F6CA"
+        android:textSize="16sp" />
 
     <!-- Botão para listar recursos -->
     <Button
         android:id="@+id/btnListarRecursos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Listar Recursos" />
+        android:backgroundTint="#0B0B0B"
+        android:fontFamily="monospace"
+        android:text="Listar Recursos"
+        android:textColor="#B9F6CA"
+        android:textSize="16sp" />
 
     <!-- Botão para realizar a conversão -->
     <Button
         android:id="@+id/btnComprar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Converter Recursos" />
+        android:backgroundTint="#0B0B0B"
+        android:fontFamily="monospace"
+        android:text="Converter Recursos"
+        android:textColor="#B9F6CA"
+        android:textSize="16sp" />
+
 </LinearLayout>

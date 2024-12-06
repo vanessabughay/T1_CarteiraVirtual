@@ -47,6 +47,8 @@ class ListarRecursosActivity : AppCompatActivity() {
             val nomeMoedaCompleto = formatarNomeMoeda(recurso.nome)
             val saldoFormatado = formatarSaldo(recurso.nome, recurso.valor)
             textView.text = "$nomeMoedaCompleto $saldoFormatado"
+            textView.textSize = 16f
+            textView.setTextColor(resources.getColor(R.color.text_color))
             layoutRecursos.addView(textView)  // Adiciona o TextView ao LinearLayout
         }
     }

@@ -4,27 +4,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/geometrico">
 
     <EditText
         android:id="@+id/etValor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:digits="0123456789,"
         android:hint="Valor a ser depositado"
         android:inputType="numberDecimal"
-        android:digits="0123456789,"
-        android:minHeight="48dp"/>
+        android:minHeight="48dp"
+        android:textColor="#B9F6CA" />
 
     <Button
         android:id="@+id/btnConfirmar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Confirmar Depósito"/>
+        android:backgroundTint="#141313"
+        android:text="Confirmar Depósito"
+        android:textColor="#B9F6CA"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btnVoltar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Voltar" />
+        android:backgroundTint="#050505"
+        android:text="Voltar"
+        android:textColor="#B9F6CA"
+        android:textSize="16sp" />
 </LinearLayout>
 

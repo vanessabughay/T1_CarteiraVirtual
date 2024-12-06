@@ -78,6 +78,8 @@ class ConverterRecursosActivity : AppCompatActivity() {
                 moedaMap[comboBoxOrigem.selectedItem.toString()] ?: return@setOnClickListener
             val destino =
                 moedaMap[comboBoxDestino.selectedItem.toString()] ?: return@setOnClickListener
+
+
             val numValor = obterDoubleDoInput(etValor, origem)
             val valor = numValor.toString().toDoubleOrNull()
 
@@ -137,6 +139,8 @@ class ConverterRecursosActivity : AppCompatActivity() {
             val numValor = obterDoubleDoInput(etValor, origem)
             val valor = numValor.toString().toDoubleOrNull()
 
+            tvResultadoCompra.text = ""
+
             // Verifica se o valor é válido antes de proceder
             if (valor == null || valor <= 0) {
                 Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT).show()
@@ -191,6 +195,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
                     }
                 }
             } else {
+                progressBar.visibility = View.GONE
                 tvResultadoCompra.text = "Saldo insuficiente na moeda de origem."
             }
         }
