@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
+import kotlin.math.round
 
 class ConverterRecursosActivity : AppCompatActivity() {
 
@@ -85,7 +86,8 @@ class ConverterRecursosActivity : AppCompatActivity() {
 
             // Verifica se o valor é válido antes de proceder
             if (valor == null || valor <= 0) {
-                Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT).show()
+                tvResultado.text ="Digite um valor válido para a conversão!"
+               // Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -106,7 +108,15 @@ class ConverterRecursosActivity : AppCompatActivity() {
                     kotlinx.coroutines.delay(delayTime)
                     progressBar.visibility = View.GONE
                     if (cotacao != null) {
-                        val valorConvertido = valor * cotacao
+                        var valorConvertido = valor * cotacao
+                        //aredondar
+                        if (destino=="ETH" || destino=="BTC"){
+                            valorConvertido=round(valorConvertido*100000000)
+                            valorConvertido/=100000000
+                        } else{
+                            valorConvertido=round(valorConvertido*100)
+                            valorConvertido/=100
+                        }
 
                         // Exibe o resultado da conversão
                         tvResultado.text =
@@ -143,7 +153,8 @@ class ConverterRecursosActivity : AppCompatActivity() {
 
             // Verifica se o valor é válido antes de proceder
             if (valor == null || valor <= 0) {
-                Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT).show()
+                tvResultadoCompra.text ="Digite um valor válido para a conversão!"
+                //Toast.makeText(this, "Digite um valor válido para a conversão!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -163,7 +174,15 @@ class ConverterRecursosActivity : AppCompatActivity() {
                         kotlinx.coroutines.delay(delayTime)
                         progressBar.visibility = View.GONE
                         if (cotacao != null) {
-                            val valorConvertido = valor * cotacao
+                            var valorConvertido = valor * cotacao
+                            //aredondar
+                            if (destino=="ETH" || destino=="BTC"){
+                                valorConvertido=round(valorConvertido*100000000)
+                                valorConvertido/=100000000
+                            } else{
+                                valorConvertido=round(valorConvertido*100)
+                                valorConvertido/=100
+                            }
 
                             // Atualiza os saldos após a conversão
 
