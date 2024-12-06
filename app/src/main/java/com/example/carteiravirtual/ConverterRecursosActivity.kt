@@ -209,7 +209,7 @@ class ConverterRecursosActivity : AppCompatActivity() {
                             )
 
                             val builder = AlertDialog.Builder(this@ConverterRecursosActivity)
-                            builder.setTitle("Sucesso!")
+                            builder.setTitle("Muito Bem!")
                             builder.setMessage("Compra realizada com sucesso!")
                             builder.setPositiveButton("OK") { dialog, which ->
                                 // Não faz nada, apenas fecha o diálogo

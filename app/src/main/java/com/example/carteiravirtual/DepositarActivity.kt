@@ -1,5 +1,6 @@
 package com.example.carteiravirtual
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -28,28 +29,35 @@ class DepositarActivity : AppCompatActivity() {
         btnConfirmar.setOnClickListener {
             val numValor = obterDoubleDoInput(etValor)
             if (numValor != null) {
-                Toast.makeText(this, "Valor convertido: $numValor", Toast.LENGTH_SHORT).show()
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Depósito")
+                builder.setMessage("Valor depositado: ${String.format("%.2f", numValor)}")
+                builder.setPositiveButton("OK") { dialog, which ->
+                    val valor = numValor.toString().toDoubleOrNull()
+
+                    if (valor == null || valor <= 0) {
+                        Toast.makeText(this, "Digite um valor válido para depositar!", Toast.LENGTH_SHORT).show()
+                        return@setPositiveButton // Retorna do setPositiveButton
+                    }
+
+                    // Atualiza o saldo do usuário no banco
+                    val saldoAtual = dbHelper.buscarSaldo("BRL")
+                    val novoSaldo = saldoAtual + valor
+                    dbHelper.salvarSaldo("BRL", novoSaldo)
+
+                    // Retorna o saldo atualizado para a MainActivity
+                    val resultIntent = Intent().apply {
+                        putExtra("novoSaldo", novoSaldo)
+                    }
+                    setResult(RESULT_OK, resultIntent)
+                    finish()
+                }
+                val dialog = builder.create()
+                dialog.show()
+
             } else {
                 Toast.makeText(this, "Entrada inválida", Toast.LENGTH_SHORT).show()
             }
-            val valor = numValor.toString().toDoubleOrNull()
-
-            if (valor == null || valor <= 0) {
-                Toast.makeText(this, "Digite um valor válido para depositar!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // Atualiza o saldo do usuário no banco
-            val saldoAtual = dbHelper.buscarSaldo("BRL")
-            val novoSaldo = saldoAtual + valor
-            dbHelper.salvarSaldo("BRL", novoSaldo)
-
-            // Retorna o saldo atualizado para a MainActivity
-            val resultIntent = Intent().apply {
-                putExtra("novoSaldo", novoSaldo)
-            }
-            setResult(RESULT_OK, resultIntent)
-            finish()
         }
     }
 
